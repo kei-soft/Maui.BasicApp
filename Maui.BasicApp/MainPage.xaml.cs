@@ -8,14 +8,68 @@ public partial class MainPage : ContentPage
     {
         InitializeComponent();
 
+        ReadDeviceInfo();
+
+        ReadDeviceDisplay();
+
         WatchBattery();
     }
 
+    /// <summary>
+    /// 디바이스 정보 가져오기
+    /// </summary>
+    private void ReadDeviceInfo()
+    {
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+        sb.AppendLine($"Model: {DeviceInfo.Current.Model}");
+        sb.AppendLine($"Manufacturer: {DeviceInfo.Current.Manufacturer}");
+        sb.AppendLine($"Name: {DeviceInfo.Current.Name}");
+        sb.AppendLine($"OS Version: {DeviceInfo.Current.VersionString}");
+        sb.AppendLine($"Idiom: {DeviceInfo.Current.Idiom}");
+        sb.AppendLine($"Platform: {DeviceInfo.Current.Platform}");
+
+        bool isVirtual = DeviceInfo.Current.DeviceType switch
+        {
+            DeviceType.Physical => false,
+            DeviceType.Virtual => true,
+            _ => false
+        };
+
+        sb.AppendLine($"Virtual device? {isVirtual}");
+
+        DisplayDeviceLabel.Text = sb.ToString();
+    }
+
+    /// <summary>
+    /// 디스플레이 정보 가져오기
+    /// </summary>
+    private void ReadDeviceDisplay()
+    {
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+        sb.AppendLine($"Pixel width: {DeviceDisplay.Current.MainDisplayInfo.Width} / Pixel Height: {DeviceDisplay.Current.MainDisplayInfo.Height}");
+        sb.AppendLine($"Density: {DeviceDisplay.Current.MainDisplayInfo.Density}");
+        sb.AppendLine($"Orientation: {DeviceDisplay.Current.MainDisplayInfo.Orientation}");
+        sb.AppendLine($"Rotation: {DeviceDisplay.Current.MainDisplayInfo.Rotation}");
+        sb.AppendLine($"Refresh Rate: {DeviceDisplay.Current.MainDisplayInfo.RefreshRate}");
+
+        DisplayDetailsLabel.Text = sb.ToString();
+    }
+
+    /// <summary>
+    /// 배터리 정보 가져오기
+    /// </summary>
     private void WatchBattery()
     {
         Battery.Default.BatteryInfoChanged += Battery_BatteryInfoChanged;
     }
 
+    /// <summary>
+    /// 배터리 상태 변경시 발생 이벤트
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void Battery_BatteryInfoChanged(object sender, BatteryInfoChangedEventArgs e)
     {
         BatteryStateLabel.Text = e.State switch
@@ -32,27 +86,87 @@ public partial class MainPage : ContentPage
         BatteryLevelLabel.Text = $"Battery is {e.ChargeLevel * 100}% charged.";
     }
 
+    /// <summary>
+    /// 슬립모드 빠질지 여부
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void AlwaysOnSwitch_Toggled(object sender, ToggledEventArgs e)
+    {
+        DeviceDisplay.Current.KeepScreenOn = AlwaysOnSwitch.IsToggled;
+    }
+
+    /// <summary>
+    /// 짧은 Haptic
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void HapticShortButton_Clicked(object sender, EventArgs e)
     {
         HapticFeedback.Default.Perform(HapticFeedbackType.Click);
     }
 
+    /// <summary>
+    /// 긴 Haptic
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void HapticLongButton_Clicked(object sender, EventArgs e)
     {
         HapticFeedback.Default.Perform(HapticFeedbackType.LongPress);
     }
 
+    /// <summary>
+    /// 진동 발생
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void VibrateStartButton_Clicked(object sender, EventArgs e)
     {
-        int secondsToVibrate = Random.Shared.Next(1, 7);
-        TimeSpan vibrationLength = TimeSpan.FromSeconds(secondsToVibrate);
-
-        Vibration.Default.Vibrate(vibrationLength);
+        // 5 초마다 진동
+        Vibration.Default.Vibrate(TimeSpan.FromSeconds(5));
     }
 
+    /// <summary>
+    /// 진동 취소
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void VibrateStopButton_Clicked(object sender, EventArgs e)
     {
         Vibration.Default.Cancel();
+    }
+
+    /// <summary>
+    /// 플래시 켜고 끄기
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void FlashlightSwitch_Toggled(object sender, ToggledEventArgs e)
+    {
+        try
+        {
+            if (FlashlightSwitch.IsToggled)
+            {
+                await Flashlight.Default.TurnOnAsync();
+            }
+            else
+            {
+                await Flashlight.Default.TurnOffAsync();
+            }
+        }
+        catch (FeatureNotSupportedException ex)
+        {
+            // Handle not supported on device exception
+        }
+        catch (PermissionException ex)
+        {
+            // Handle permission exception
+        }
+        catch (Exception ex)
+        {
+            // Unable to turn on/off flashlight
+        }
     }
 }
 

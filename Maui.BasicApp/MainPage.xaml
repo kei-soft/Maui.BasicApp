@@ -10,36 +10,63 @@
             Spacing="25"
             VerticalOptions="Center">
 
+            <HorizontalStackLayout>
+                <Label Text="Always On Screen" VerticalTextAlignment="Center" />
+
+                <Switch
+                    x:Name="AlwaysOnSwitch"
+                    IsToggled="False"
+                    Toggled="AlwaysOnSwitch_Toggled" />
+            </HorizontalStackLayout>
+
+            <Label x:Name="DisplayDeviceLabel" />
+
+            <Label x:Name="DisplayDetailsLabel" />
+
             <Label x:Name="BatteryStateLabel" />
             <Label x:Name="BatteryLevelLabel" />
 
-            <Button
-                x:Name="HapticShortButton"
-                Clicked="HapticShortButton_Clicked"
-                HorizontalOptions="Center"
-                Text="Haptic Short" />
+            <HorizontalStackLayout>
+                <Button
+                    x:Name="HapticShortButton"
+                    Margin="5"
+                    Clicked="HapticShortButton_Clicked"
+                    HorizontalOptions="Center"
+                    Text="Haptic Short" />
 
-            <Button
-                x:Name="HapticLongButton"
-                Clicked="HapticLongButton_Clicked"
-                HorizontalOptions="Center"
-                Text="Haptic Long" />
+                <Button
+                    x:Name="HapticLongButton"
+                    Margin="5"
+                    Clicked="HapticLongButton_Clicked"
+                    HorizontalOptions="Center"
+                    Text="Haptic Long" />
+            </HorizontalStackLayout>
 
-            <Button
-                x:Name="VibrateStartButton"
-                Clicked="VibrateStartButton_Clicked"
-                HorizontalOptions="Center"
-                Text="Vibrate Start" />
+            <HorizontalStackLayout>
+                <Button
+                    x:Name="VibrateStartButton"
+                    Margin="5"
+                    Clicked="VibrateStartButton_Clicked"
+                    HorizontalOptions="Center"
+                    Text="Vibrate Start" />
 
-            <Button
-                x:Name="VibrateStoputton"
-                Clicked="VibrateStopButton_Clicked"
-                HorizontalOptions="Center"
-                Text="Vibrate Stop" />
+                <Button
+                    x:Name="VibrateStoputton"
+                    Margin="5"
+                    Clicked="VibrateStopButton_Clicked"
+                    HorizontalOptions="Center"
+                    Text="Vibrate Stop" />
+            </HorizontalStackLayout>
 
-
+            <HorizontalStackLayout>
+                <Label Text="Flash" VerticalTextAlignment="Center" />
+                <Switch
+                    x:Name="FlashlightSwitch"
+                    IsToggled="False"
+                    Toggled="FlashlightSwitch_Toggled" />
+            </HorizontalStackLayout>
 
         </VerticalStackLayout>
-    </ScrollView>
 
+    </ScrollView>
 </ContentPage>
