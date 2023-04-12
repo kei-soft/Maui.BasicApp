@@ -6,8 +6,8 @@
 
     <ScrollView>
         <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25"
+            Padding="15,0"
+            Spacing="5"
             VerticalOptions="Center">
 
             <HorizontalStackLayout>
@@ -65,8 +65,19 @@
                     IsToggled="False"
                     Toggled="FlashlightSwitch_Toggled" />
             </HorizontalStackLayout>
-
+            <HorizontalStackLayout>
+                <Entry x:Name="shareEntry" Text="http://kjun.kr" />
+                <Button
+                    x:Name="textShareButton"
+                    Margin="5"
+                    Clicked="textShareButton_Clicked"
+                    Text="Test Share" />
+                <Button
+                    x:Name="uriShareButton"
+                    Margin="5"
+                    Clicked="uriShareButton_Clicked"
+                    Text="Uri Share" />
+            </HorizontalStackLayout>
         </VerticalStackLayout>
-
     </ScrollView>
 </ContentPage>

@@ -168,5 +168,51 @@ public partial class MainPage : ContentPage
             // Unable to turn on/off flashlight
         }
     }
+
+    private async void textShareButton_Clicked(object sender, EventArgs e)
+    {
+        await ShareText(this.shareEntry.Text);
+    }
+
+    private async void uriShareButton_Clicked(object sender, EventArgs e)
+    {
+        await ShareUri(this.shareEntry.Text, Share.Default);
+    }
+
+    public async Task ShareText(string text)
+    {
+        if (string.IsNullOrEmpty(text)) return;
+
+        await Share.Default.RequestAsync(new ShareTextRequest
+        {
+            Text = text,
+            Title = "Share Text"
+        });
+    }
+
+    public async Task ShareUri(string uri, IShare share)
+    {
+        if (string.IsNullOrEmpty(uri)) return;
+
+        await share.RequestAsync(new ShareTextRequest
+        {
+            Uri = uri,
+            Title = "Share Web Link"
+        });
+    }
+
+    public async Task ShareFile()
+    {
+        string fn = "Attachment.txt";
+        string file = Path.Combine(FileSystem.CacheDirectory, fn);
+
+        File.WriteAllText(file, "Hello World");
+
+        await Share.Default.RequestAsync(new ShareFileRequest
+        {
+            Title = "Share text file",
+            File = new ShareFile(file)
+        });
+    }
 }
 
