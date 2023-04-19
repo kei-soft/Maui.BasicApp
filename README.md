@@ -1,3 +1,3 @@
 # Maui.BasicApp
 
-Blog : https://kjun.kr/1834 , https://kjun.kr/1871
+Blog : https://kjun.kr/1834 (Device Info) , https://kjun.kr/1871 (Share), 
